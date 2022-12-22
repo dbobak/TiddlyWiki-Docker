@@ -1,10 +1,9 @@
-#!/bin/sh
 #
 # MIT License
-# Copyright (c) 2017-2020 Nicola Worthington <nicolaw@tfb.net>
+# Copyright (c) 2022 Darek Bobak
 #
-# https://nicolaw.uk
-# https://nicolaw.uk/#TiddlyWiki
+# https://github.com/dbobak/TiddlyWiki-Docker/
+# based on https://gitlab.com/nicolaw/tiddlywiki
 #
 # Refer to the canonical online documentation for help:
 # - https://tiddlywiki.com/static/Using%2520TiddlyWiki%2520on%2520Node.js.html

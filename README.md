@@ -2,14 +2,14 @@
 
 [TiddlyWiki 5](https://tiddlywiki.com) Docker image.
 
-Google Cloud users may also be interested in
-https://github.com/neechbear/tiddlywiki-gce.
 
 ## Supported Tags
 
+* `5.2.2`, `5.2.2-node17.9-alpine3.15`, `latest`
 * `5.2.0`, `5.2.0-node17.0-alpine3.13`
 * `5.1.23`, `5.1.23-node14.18.1-alpine3.14`
 * `5.1.22`, `5.1.22-node14.9.0-alpine3.12`
+
 
 ## Requirements
 
@@ -21,9 +21,10 @@ https://github.com/neechbear/tiddlywiki-gce.
    running a recent Linux distribution that uses systemd. (Ubuntu 12 or older,
    for example, do not support systemd by default).
 
+
 ## Manual Execution
 
-```
+```console
 $ docker run -p 8080:8080 --name mywiki nicolaw/tiddlywiki
 ```
 
@@ -33,7 +34,7 @@ Alternatively the following will instruct Docker to keep your TiddlyWiki
 container running at all times untill explicitly stopped with a `docker stop` or
 `docker kill` command:
 
-```
+```console
 $ mkdir ~/tiddlywiki
 $ docker run \
     -p 8080:8080 -d --restart unless-stopped --name mywiki \
@@ -41,19 +42,20 @@ $ docker run \
     nicolaw/tiddlywiki
 ```
 
+
 ## Systemd Service
 
 A systemd service unit file is included in the source repository of this
-project. (See https://github.com/neechbear/tiddlywiki ). This can be installed to
+project. (See https://gitlab.com/nicolaw/tiddlywiki). This can be installed to
 automatically start one or more TiddlyWikis every time your machine boots.
 
 It also provides you with some level of configurability by simply changing the
-contents of the `/etc/tiddlywiki/mywiki.service.conf` configuration file.
+contents of the `/etc/tiddlywiki/mywiki.conf` configuration file.
 
-```
+```console
 $ sudo mkdir /etc/tiddlywiki/
 $ sudo cp tiddlywiki.service /etc/systemd/system/mywiki.service
-$ sudo cp tiddlywiki.service.conf /etc/tiddlywiki/mywiki.service.conf
+$ sudo cp tiddlywiki.conf /etc/tiddlywiki/mywiki.conf
 $ sudo systemctl daemon-reload
 $ sudo systemctl start mywiki.service
 ```
@@ -61,10 +63,11 @@ $ sudo systemctl start mywiki.service
 Check the status of the TiddlyWiki service, or watch the logs using the
 following commands:
 
-```
+```console
 $ sudo systemctl status mywiki.service
 $ sudo journalctl -f -u mywiki.service
 ```
+
 
 ## Tiddler Data Storage
 
@@ -74,8 +77,8 @@ automatically be saved inside an anonymous Docker volume.
 Specifying a volume bind mount location for `/var/lib/tiddlywiki` will cause the
 Tiddler data to be written to that location on your local filesystem.
 
-```
-$ docker run --rm -p 8080:8080 -v ~/wikidata:/var/lib/tiddlyiki --name mywiki nicolaw/tiddlywiki
+```console
+$ docker run --rm -p 8080:8080 -v ~/wikidata:/var/lib/tiddlywiki --name mywiki nicolaw/tiddlywiki
 ```
 
 In the case of operating TiddlyWiki from systemd, the Docker volume has the
@@ -85,14 +88,15 @@ on disk in the event that you wish to perform a backup.
 
 Alternatively, to specify a bind mount location, uncomment and modify the
 `TW_DOCKERVOLUME` line, and optionally the `TW_DOCKERUID` and `TW_DOCKERGID`
-lines in the `/etc/tiddlywiki/mywiki.service.conf` configuration file.
+lines in the `/etc/tiddlywiki/mywiki.conf` configuration file.
 
 You will need to restart the service once you have saved your file change.
 
-```
-$ sudo vi /etc/tiddlywiki/mywiki.service.conf
+```console
+$ sudo vi /etc/tiddlywiki/mywiki.conf
 $ sudo systemctl restart mywiki.service
 ```
+
 
 ## Authentication
 
@@ -101,20 +105,21 @@ By default, the username is set to `anonymous` with no password.
 Specify the `TW_USERNAME` and `TW_PASSWORD` environment variables to enable
 password authentication.
 
-```
+```console
 $ docker run -p 8080:8080 -e "TW_USERNAME=$USER" -e "TW_PASSWORD=hunter2" --name mywiki nicolaw/tiddlywiki
 ```
 
 Similarly if you are using systemd to start your TiddlyWiki, uncomment and
 modify the `TW_USERNAME` and `TW_PASSWORD` lines from the
-`/etc/tiddlywiki/mywiki.service.conf` file.
+`/etc/tiddlywiki/mywiki.conf` file.
 
 You will need to restart the service once you have saved your file change.
 
-```
-$ sudo vi /etc/tiddlywiki/mywiki.service.conf
+```console
+$ sudo vi /etc/tiddlywiki/mywiki.conf
 $ sudo systemctl restart mywiki.service
 ```
+
 
 ## Configurable Variables
 
@@ -123,7 +128,7 @@ Refer to the canonical online documentation for help for additional help.
 * https://tiddlywiki.com/static/Using%2520TiddlyWiki%2520on%2520Node.js.html
 * https://tiddlywiki.com/static/ServerCommand.html
 
-```
+```ini
 TW_WIKINAME=mywiki
 TW_USERNAME=janedoe
 TW_PASSWORD=
@@ -142,7 +147,7 @@ If you are operating in a low memory environment (inside a small
 AWS, GCE or other cloud virtual machine for example), you may wish to set
 `NODE_MEM` to specify the maximum memory can NodeJS may use (specified in MB).
 
-```
+```ini
 NODE_MEM=400
 NODE_OPTIONS=
 ```
@@ -151,11 +156,12 @@ The following variables only affect the operation while using the system service
 unit to start TiddlyWiki. They do nothing if you are running the Docker
 container independently of systemd.
 
-```
+```ini
 TW_DOCKERVOLUME=/home/janedoe/tiddlywiki
 TW_DOCKERUID=0
 TW_DOCKERGID=0
 ```
+
 
 ## Docker Compose
 
@@ -172,33 +178,45 @@ This allows control over the following `Dockerfile` build arguments:
 * `USER` - Unix user or UID to run the TiddlyWiki process as (useful if
   your container runtime environment does not allow you to override)
 
-The `Makefile` in the https://github.com/neechbear/tiddlywiki.git also makes use
+The `Makefile` in the https://gitlab.com/nicolaw/tiddlywiki.git also makes use
 of these build arguments in a similar way.
 
-Example [Docker compose](https://docs.docker.com/compose/) definition:
+Example partial [Docker compose](https://docs.docker.com/compose/) definition:
 
-```
+```yaml
 tiddlywiki:
-   container_name: tiddlywiki
-   image: nicolaw/tiddlywiki
-   build:
-     context: https://github.com/neechbear/tiddlywiki.git
-     args:
-       TW_VERSION: 5.1.23
-       USER: 501
-       BASE_IMAGE: 14-alpine3.12
+  container_name: tiddlywiki
+  image: nicolaw/tiddlywiki
+  build:
+    context: https://gitlab.com/nicolaw/tiddlywiki.git
+    args:
+      TW_VERSION: 5.2.2
+      USER: 501
+      BASE_IMAGE: 17.9-alpine3.15
 ````
+
+To use the provided https://gitlab.com/nicolaw/tiddlywiki/-/blob/master/docker-compose.yaml:
+
+```console
+$ docker-compose up -d
+Starting tiddlywiki ... done
+```
+
+
 
 ## Author
 
-Nicola Worthington <nicolaw@tfb.net>, https://nicolaw.uk,
-https://nicolaw.uk/#TiddlyWiki.
+Copyright (c) 2022 Darek Bobak
+https://github.com/dbobak/TiddlyWiki-Docker/
+
+Based on: https://gitlab.com/nicolaw/tiddlywiki by Nicola Worthington
 
 ## License
 
 MIT License
 
-Copyright (c) 2018-2021 Nicola Worthington
+Copyright (c) 2018-2022 Nicola Worthington
+Copyright (c) 022 Darek Bobak
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
